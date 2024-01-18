@@ -1,6 +1,10 @@
 # Credits
 All credits to Soloam for the codebase, I am simply amending as per my needs and improving where I see fit.
 
+# To Do
+All credits to Soloam for the codebase, I am simply amending as per my needs and improving where I see fit.
+
+
 # PID Controller to Home Assistant
 
 A PID Controller allows you to target a set value and achieve that setting in a smoothly and mantinin it without fluctuations
