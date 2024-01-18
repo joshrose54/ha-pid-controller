@@ -1,12 +1,12 @@
 #
-#  Copyright (c) 2022, Diogo Silva "Soloam"
+#  Copyright (c) 2024, Joshua Rose "joshrose54"
 #  Creative Commons BY-NC-SA 4.0 International Public License
 #  (see LICENSE.md or https://creativecommons.org/licenses/by-nc-sa/4.0/)
 #
 """
 PID Controller.
 For more details about this sensor, please refer to the documentation at
-https://github.com/soloam/ha-pid-controller/
+https://github.com/joshrose54/ha-pid-controller
 """
 from __future__ import annotations
 
@@ -794,12 +794,13 @@ class PidController(SensorEntity):
                 self._pid.windup = self.windup
 
             if set_point != self._pid.set_point:
-                self.reset_pid()
+                #self.reset_pid()
                 self._pid.set_point = set_point
 
-            if entity == self._source:
-                self._pid.update(source)
-
+            #if entity == self._source:
+                #self._pid.update(source)
+            self._pid.update(source)
+            
             output = float(self._pid.output)
 
             output = max(min(output, 100), 0)
