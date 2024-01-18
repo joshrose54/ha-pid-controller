@@ -19,14 +19,6 @@ A PID Controller allows you to target a set value and achieve that setting in a 
 ## What makes a PID Controller special
 When coding a temperature controller for exemple, we like to set the max temperature and control the flow output or temperature output, based on the response from the temperature sensors.A PID Controller retrieves the response of the sensors and calculates the power output necessary to achieve the desired target or maintain it with small oscillations.
 ## Installation
-### Install from HACS (recommended)
-1. Have [HACS][hacs] installed, this will allow you to easily manage and track updates.
-1. Search for "PID Controller".
-1. Click Install below the found integration.
-... then if you want to use `configuration.yaml` to configure the sensor...
-1. Add `pid_controller` sensor to your `configuration.yaml` file. See configuration examples below.
-1. Restart Home Assistant
-### Manual installation
 1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 1. If you do not have a `custom_components` directory (folder) there, you need to create it.
 1. Download the content from the custom_components to that folder
