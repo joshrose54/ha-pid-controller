@@ -52,7 +52,7 @@ sensor:
     p: '{{ states("input_number.proportional") }}'
     i: '{{ states("input_number.integral") }}'
     d: '{{ states("input_number.derivative") }}'
-    entity_id: input_number.reading
+    sensor_entity: sensor.temperature (AMEND THIS TO YOUR INPUT SENSOR)
     invert: '{{ states("input_boolean.invert") }}'
     precision: '{{ states("input_number.precision") }}'
     minimum: '{{ states("input_number.minimum") }}'
@@ -96,13 +96,6 @@ input_number:
     initial: 5
     min: 0
     max: 20
-    step: 1
-
-  reading:
-    name: Reading
-    initial: 0
-    min: 0
-    max: 30
     step: 1
 
   set_point:
