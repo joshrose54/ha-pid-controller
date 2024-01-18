@@ -2,7 +2,7 @@
 Credit to Soloam for the codebase, I am simply amending as per my needs and improving where I see fit.
 
 # To Do
-1. Integrate sensor reading directly into controller to avoid using an automation to set it from a sepearete entity [In Progess: ⏰]
+1. Integrate sensor reading directly into controller to avoid using an automation to set it from a sepearete entity [ In Progess: ⏰ ]
 2. Add minimum cycle durations (as optional variable)
 3. Add cold and hot tolerances (as optional variables)
 4. Add external temperature and introduce new logic to PID to accomodate external temperature compensation gain (optional gain)
