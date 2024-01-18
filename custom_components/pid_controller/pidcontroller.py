@@ -1,12 +1,12 @@
 #
-#  Copyright (c) 2022, Diogo Silva "Soloam"
+#  Copyright (c) 2024, Joshua Rose "joshrose54"
 #  Creative Commons BY-NC-SA 4.0 International Public License
 #  (see LICENSE.md or https://creativecommons.org/licenses/by-nc-sa/4.0/)
 #
 """
 PID Controller.
 For more details about this sensor, please refer to the documentation at
-https://github.com/soloam/ha-pid-controller/
+https://github.com/joshrose54/ha-pid-controller
 """
 import time
 
@@ -80,9 +80,31 @@ class PIDController:
 
         # Calculate delta error
         delta_error = error - last_error
+        
+        # Calculate delta input
+        delta_feedback_value = feedback_value - ( self._last_input if self._last_input is not None else 0)
 
         # Calculate P
         self._p_term = self._kp * error
+
+        # Calculate I
+        i_term_delta = self._ki * error
+        i_term_delta = self.clamp_value(i_term_delta, self._windup)
+        self._i_term += i_term_delta
+        self._i_term = self.clamp_value(self._i_term, (0, 100))
+
+        # Calculate D
+        self._d_term = self._kd * delta_feedback_value
+
+
+        """# Calculate I
+        i_term_delta = self._ki * error
+        i_term_delta = self.clamp_value(i_term_delta, self._windup)
+        self._i_term += i_term_delta
+        self._i_term = self.clamp_value(self._i_term, (0, 100))
+
+        # Calculate D
+        self._d_term = self._kd * delta_feedback_value
 
         # Calculate I and avoids Sturation
         if self._last_output is None or (
@@ -92,7 +114,7 @@ class PIDController:
             self._i_term = self.clamp_value(self._i_term, self._windup)
 
         # Calculate D
-        self._d_term = self._kd * delta_error / delta_time
+        self._d_term = self._kd * delta_error / delta_time"""
 
         # Compute final output
         self._output = self._p_term + self._i_term + self._d_term
