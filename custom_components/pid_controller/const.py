@@ -19,6 +19,7 @@ SERVICE_RESET_PID = "reset_pid"
 SERVICE_AUTOTUNE = "autotune_pid"
 
 # Configuration
+CONF_SENSOR = "sensor_entity"
 CONF_SETPOINT = "set_point"
 CONF_PROPORTIONAL = "p"
 CONF_INTEGRAL = "i"
