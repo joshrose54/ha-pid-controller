@@ -58,6 +58,7 @@ ATTR_DEVICE_CLASS = "device_class"
 ATTR_PROPORTIONAL = "proportional"
 ATTR_INTEGRAL = "integral"
 ATTR_DERIVATIVE = "derivative"
+ATTR_SENSOR_ENTITY = "sensor_entity"
 ATTR_SETPOINT = "set_point"
 ATTR_SOURCE = "source"
 ATTR_PRECISION = "precision"
@@ -79,6 +80,7 @@ ATTR_TO_PROPERTY = [
     ATTR_PROPORTIONAL,
     ATTR_INTEGRAL,
     ATTR_DERIVATIVE,
+    ATTR_SENSOR_ENTITY,
     ATTR_SETPOINT,
     ATTR_SOURCE,
     ATTR_PRECISION,
