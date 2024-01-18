@@ -1,5 +1,5 @@
 # Credits
-All credits to Soloam for the codebase, I am simply amending as per my needs and improving where I see fit.
+Credit to Soloam for the codebase, I am simply amending as per my needs and improving where I see fit.
 
 # To Do
 1. Integrate sensor reading directly into controller to avoid using an automation to set it from a sepearete entity
