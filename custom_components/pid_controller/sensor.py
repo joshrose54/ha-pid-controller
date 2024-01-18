@@ -50,6 +50,7 @@ PLATFORM_SCHEMA = vol.All(
             vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.template,
             vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
             vol.Optional(CONF_UNIQUE_ID): cv.string,
+            vol.Required(CONF_SENSOR): cv.entity_id,
             vol.Required(CONF_SETPOINT): cv.template,
             vol.Optional(CONF_PROPORTIONAL, default=0): cv.template,
             vol.Optional(CONF_INTEGRAL, default=0): cv.template,
@@ -77,6 +78,7 @@ async def async_setup_platform(
 
     enabled = config.get(CONF_ENABLED)
     icon = config.get(CONF_ICON)
+    sensor_entity = config.get(CONF_SENSOR)
     set_point = config.get(CONF_SETPOINT)
     proportional = config.get(CONF_PROPORTIONAL)
     integral = config.get(CONF_INTEGRAL)
@@ -133,6 +135,7 @@ async def async_setup_platform(
                 round_type,
                 precision,
                 config.get(CONF_ENTITY_ID),
+                sensor_entity,
             )
         ]
     )
@@ -149,6 +152,7 @@ class PidController(SensorEntity):
         name,
         enabled,
         icon,
+        sensor_entity,
         set_point,
         unit_of_measurement,
         device_class,
@@ -170,6 +174,7 @@ class PidController(SensorEntity):
 
         self._enabled_template = enabled
         self._icon_template = icon
+        self._sensor_entity = sensor_entity
         self._set_point_template = set_point
         self._device_class_template = device_class
         self._sample_time_template = sample_time
@@ -321,10 +326,9 @@ class PidController(SensorEntity):
 
     @property
     def source(self) -> float:
-        """Returns Response"""
-
-        source_state = self.hass.states.get(self._source)
-        if not source_state:
+        """Returns the current state of the sensor_entity as the source for PID calculations."""
+        source_state = self.hass.states.get(self._sensor_entity)
+        if not source_state or source_state.state in [STATE_UNKNOWN, STATE_UNAVAILABLE]:
             return float(0)
 
         try:
@@ -744,6 +748,11 @@ class PidController(SensorEntity):
                 self._entities += info.entities
                 self._force_update += info.entities
                 self._reset_pid += info.entities
+
+        if self._sensor_entity and self.hass.states.get(self._sensor_entity):
+            self._entities.append(self._sensor_entity)
+        else:
+            _LOGGER.warning(f"Sensor entity '{self._sensor_entity}' not found in Home Assistant.")
 
         self._entities += [self._source]
 
