@@ -46,6 +46,7 @@ PLATFORM_SCHEMA = vol.All(
             vol.Optional(CONF_UNIQUE_ID): cv.string,
             vol.Required(CONF_SENSOR): cv.entity_id,
             vol.Required(CONF_SETPOINT): cv.template,
+            vol.Optional(CONF_SHUT_DOWN_HIGH, default=DEFAULT_SHUT_DOWN_HIGH): cv.positive_float,
             vol.Optional(CONF_PROPORTIONAL, default=0): cv.template,
             vol.Optional(CONF_INTEGRAL, default=0): cv.template,
             vol.Optional(CONF_DERIVATIVE, default=0): cv.template,
@@ -74,6 +75,7 @@ async def async_setup_platform(
     icon = config.get(CONF_ICON)
     sensor_entity = config.get(CONF_SENSOR)
     set_point = config.get(CONF_SETPOINT)
+    shut_down_high = config.get(CONF_SHUT_DOWN_HIGH, DEFAULT_SHUT_DOWN_HIGH)
     proportional = config.get(CONF_PROPORTIONAL)
     integral = config.get(CONF_INTEGRAL)
     derivative = config.get(CONF_DERIVATIVE)
@@ -85,7 +87,7 @@ async def async_setup_platform(
     sample_time = config.get(CONF_SAMPLE_TIME)
     windup = config.get(CONF_WINDUP)
     device_class = config.get(CONF_DEVICE_CLASS)
-
+    
     ## Process Templates.
     for template in [
         enabled,
@@ -102,6 +104,7 @@ async def async_setup_platform(
         maximum,
         round_type,
         device_class,
+        shut_down_high,
     ]:
         if template is not None:
             template.hass = hass
@@ -130,6 +133,7 @@ async def async_setup_platform(
                 precision,
                 config.get(CONF_ENTITY_ID),
                 sensor_entity,
+                shut_down_high,
             )
         ]
     )
@@ -163,6 +167,7 @@ class PidController(SensorEntity):
         round_type,
         precision,
         entity_id,
+        shut_down_high,
     ):
 
         """
@@ -183,6 +188,7 @@ class PidController(SensorEntity):
         self._proportional_template = proportional
         self._integral_template = integral
         self._derivative_template = derivative
+        self._shut_down_high_template = shut_down_high
         self._invert_template = invert
         self._minimum_template = minimum
         self._maximum_template = maximum
@@ -738,6 +744,20 @@ class PidController(SensorEntity):
             else:
                 self._entities += info.entities
                 self._force_update += info.entities
+                
+        if self._sensor_entity and self.hass.states.get(self._sensor_entity):
+            self._entities.append(self._sensor_entity)
+        else:
+            _LOGGER.warning(f"Sensor entity '{self._sensor_entity}' not found in Home Assistant.")
+
+        if self._shut_down_high_template is not None:
+            try:
+                info = self._shut_down_high_template.async_render_to_info()
+            except (TemplateError, TypeError) as ex:
+                self.show_template_exception(ex, "shut_down_high")
+            else:
+                self._entities += info.entities
+                self._reset_pid += info.entities
 
         if self._invert_template is not None:
             try:
@@ -749,11 +769,6 @@ class PidController(SensorEntity):
                 self._force_update += info.entities
                 self._reset_pid += info.entities
 
-        if self._sensor_entity and self.hass.states.get(self._sensor_entity):
-            self._entities.append(self._sensor_entity)
-        else:
-            _LOGGER.warning(f"Sensor entity '{self._sensor_entity}' not found in Home Assistant.")
-
         self._entities += [self._source]
 
     def reset_pid(self):
@@ -761,7 +776,7 @@ class PidController(SensorEntity):
             self._pid.reset_pid()
 
     def update(self) -> None:
-        """Update the sensor state if it needed."""
+        """Update the sensor state if needed."""
         self._update_sensor()
 
     def _update_sensor(self, entity=None) -> None:
