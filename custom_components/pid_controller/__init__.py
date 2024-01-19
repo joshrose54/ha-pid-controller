@@ -12,16 +12,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.service import verify_domain_control
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.exceptions import HomeAssistantError
-
 import voluptuous as vol
-
-# pylint: disable=wildcard-import, unused-wildcard-import
 from .const import *
 
 __version__ = VERSION
 
 _LOGGER = logging.getLogger(__name__)
 
+# Define the schema for the services provided by this component
 SERVICE_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_ENTITY_ID): cv.entity_id,
@@ -30,8 +28,11 @@ SERVICE_SCHEMA = vol.Schema(
 
 # pylint: disable=unused-argument
 async def async_setup(hass: HomeAssistant, config):
-    """Set up a pid."""
-
+    """
+    Async setup function to initialize the PID controller component.
+    Registers the PID reset and autotune services.
+    """
+    
     _LOGGER.debug("setup")
 
     async def async_pid_service_reset(call) -> None:
@@ -62,6 +63,11 @@ async def async_setup(hass: HomeAssistant, config):
 
 
 def get_entity_from_domain(hass: HomeAssistant, domain, entity_id):
+    """
+    Helper function to retrieve an entity from a domain.
+    Raises an error if the domain or entity is not found.
+    """
+    
     component = hass.data.get(domain)
     if component is None:
         raise HomeAssistantError(f"{domain} component not set up")
@@ -74,6 +80,10 @@ def get_entity_from_domain(hass: HomeAssistant, domain, entity_id):
 
 
 async def pid_reset_service(hass: HomeAssistant, call):
+    """
+    Service handler for resetting a PID controller.
+    """
+    
     entity_id = call.data["entity_id"]
     domain = entity_id.split(".")[0]
 
@@ -86,6 +96,10 @@ async def pid_reset_service(hass: HomeAssistant, call):
 
 
 async def pid_autotune_service(hass: HomeAssistant, call):
+    """
+    Service handler for autotuning a PID controller.
+    """
+    
     entity_id = call.data["entity_id"]
     domain = entity_id.split(".")[0]
 
