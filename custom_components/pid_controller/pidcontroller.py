@@ -1,24 +1,25 @@
-#
-#  Copyright (c) 2024, Joshua Rose "joshrose54"
-#  Creative Commons BY-NC-SA 4.0 International Public License
-#  (see LICENSE.md or https://creativecommons.org/licenses/by-nc-sa/4.0/)
-#
+
 """
-PID Controller.
-For more details about this sensor, please refer to the documentation at
-https://github.com/joshrose54/ha-pid-controller
+PID Controller Implementation.
+This module contains the logic for a Proportional-Integral-Derivative (PID) controller.
+
+For more details about this sensor, please refer to the documentation at https://github.com/joshrose54/ha-pid-controller
 """
+
 import time
 
-# pylint: disable=invalid-name
-
-
 class PIDController:
-    """PID Controller"""
+    """
+    Class representing a PID Controller.
+    """
 
     WARMUP_STAGE = 3
 
     def __init__(self, P=0.2, I=0.0, D=0.0, logger=None):
+        """
+        Initialize the PID controller with given PID constants.
+        """
+        
         self._logger = logger
 
         self._set_point = 0
@@ -41,6 +42,10 @@ class PIDController:
         self.reset_pid()
 
     def reset_pid(self):
+        """
+        Reset the PID controller terms.
+        """
+        
         self._p_term = 0.0
         self._i_term = 0.0
         self._d_term = 0.0
@@ -51,7 +56,9 @@ class PIDController:
         self._last_time = None
 
     def update(self, feedback_value, in_time=None):
-        """Calculates PID value for given reference feedback"""
+        """
+        Update the PID controller with a new feedback value.
+        """
 
         current_time = in_time if in_time is not None else self.current_time()
         if self._last_time is None:
@@ -95,26 +102,6 @@ class PIDController:
 
         # Calculate D
         self._d_term = self._kd * delta_feedback_value
-
-
-        """# Calculate I
-        i_term_delta = self._ki * error
-        i_term_delta = self.clamp_value(i_term_delta, self._windup)
-        self._i_term += i_term_delta
-        self._i_term = self.clamp_value(self._i_term, (0, 100))
-
-        # Calculate D
-        self._d_term = self._kd * delta_feedback_value
-
-        # Calculate I and avoids Sturation
-        if self._last_output is None or (
-            self._last_output > 0 and self._last_output < 100
-        ):
-            self._i_term += self._ki * error * delta_time
-            self._i_term = self.clamp_value(self._i_term, self._windup)
-
-        # Calculate D
-        self._d_term = self._kd * delta_error / delta_time"""
 
         # Compute final output
         self._output = self._p_term + self._i_term + self._d_term
@@ -209,11 +196,19 @@ class PIDController:
         return self._output
 
     def log(self, message):
+        """
+        Log a message using the controller's logger.
+        """
+        
         if not self._logger:
             return
         self._logger.warning(message)
 
     def current_time(self):
+        """
+        Get the current time, using monotonic time if available.
+        """
+        
         try:
             ret_time = time.monotonic()
         except AttributeError:
@@ -222,6 +217,10 @@ class PIDController:
         return ret_time
 
     def clamp_value(self, value, limits):
+        """
+        Clamp a value within specified limits.
+        """
+        
         lower, upper = limits
 
         if value is None:
