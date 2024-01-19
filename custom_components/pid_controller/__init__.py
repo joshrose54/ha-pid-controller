@@ -1,12 +1,8 @@
-#
-#  Copyright (c) 2024, Joshua Rose "joshrose54"
-#  Creative Commons BY-NC-SA 4.0 International Public License
-#  (see LICENSE.md or https://creativecommons.org/licenses/by-nc-sa/4.0/)
-#
 """
-PID Controller.
-For more details about this sensor, please refer to the documentation at
-https://github.com/joshrose54/ha-pid-controller
+PID Controller Component Initialization.
+This module sets up the PID controller component and its services in Home Assistant.
+
+For more details about this sensor, please refer to the documentation at https://github.com/joshrose54/ha-pid-controller
 """
 import logging
 from distutils import util
