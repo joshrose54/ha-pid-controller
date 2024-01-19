@@ -5,16 +5,16 @@ This module defines constants used throughout the PID controller implementation.
 For more details about this sensor, please refer to the documentation at https://github.com/joshrose54/ha-pid-controller
 """
 
-# Data
+# Component details
 COMPONENT_DOMAIN = "pid_controller"
 VERSION = "1.0.0"
 
-# Services
+# Services provided by this component
 COMPONENT_SERVICES = "pid-services"
 SERVICE_RESET_PID = "reset_pid"
 SERVICE_AUTOTUNE = "autotune_pid"
 
-# Configuration
+# Configuration keys
 CONF_SENSOR = "sensor_entity"
 CONF_SETPOINT = "set_point"
 CONF_PROPORTIONAL = "p"
@@ -27,7 +27,7 @@ CONF_SAMPLE_TIME = "sample_time"
 CONF_WINDUP = "windup"
 CONF_ENABLED = "enabled"
 
-# Default
+# Default values
 DEFAULT_NAME = "PID Controller"
 DEFAULT_PRECISION = 2
 DEFAULT_MINIMUM = 0
@@ -67,6 +67,7 @@ ATTR_P = "p"
 ATTR_I = "i"
 ATTR_D = "d"
 
+# Mapping of attributes to internal properties
 ATTR_TO_PROPERTY = [
     ATTR_ENABLED,
     ATTR_TUNNING,
