@@ -1,19 +1,13 @@
-#
-#  Copyright (c) 2024, Joshua Rose "joshrose54"
-#  Creative Commons BY-NC-SA 4.0 International Public License
-#  (see LICENSE.md or https://creativecommons.org/licenses/by-nc-sa/4.0/)
-#
 """
-PID Controller.
-For more details about this sensor, please refer to the documentation at
-https://github.com/joshrose54/ha-pid-controller
+PID Controller Sensor.
+This module implements the PID controller as a Home Assistant sensor entity.
+
+For more details about this sensor, please refer to the documentation at https://github.com/joshrose54/ha-pid-controller
 """
 from __future__ import annotations
-
 import logging
 from math import floor, ceil
 from typing import Any, Mapping, Optional
-
 import voluptuous as vol
 from _sha1 import sha1
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
@@ -36,13 +30,13 @@ from homeassistant.helpers.config_validation import PLATFORM_SCHEMA
 from homeassistant.helpers.event import async_track_state_change
 from homeassistant.helpers.template import result_as_boolean
 
-# pylint: disable=wildcard-import, unused-wildcard-import
 from .const import *
 from .pidcontroller import PIDController as PID
 
 
 _LOGGER = logging.getLogger(__name__)
 
+# Platform schema definition
 PLATFORM_SCHEMA = vol.All(
     PLATFORM_SCHEMA.extend(
         {
@@ -71,7 +65,7 @@ PLATFORM_SCHEMA = vol.All(
     )
 )
 
-# pylint: disable=unused-argument
+# Async setup function for the PID controller platform
 async def async_setup_platform(
     hass: HomeAssistant, config, async_add_entities, discovery_info=None
 ):
@@ -143,8 +137,10 @@ async def async_setup_platform(
 
 # pylint: disable=r0902
 class PidController(SensorEntity):
-
-    # pylint: disable=r0913
+    """
+    Home Assistant representation of a PID controller as a sensor entity.
+    """
+    
     def __init__(
         self,
         hass: HomeAssistant,
@@ -168,6 +164,10 @@ class PidController(SensorEntity):
         precision,
         entity_id,
     ):
+
+        """
+        Initialize the PID controller sensor entity.
+        """
 
         self._attr_name = name
         self._attr_native_unit_of_measurement = unit_of_measurement
