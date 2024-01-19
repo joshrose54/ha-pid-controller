@@ -114,68 +114,99 @@ class PIDController:
 
     @property
     def kp(self):
-        """Aggressively the PID reacts to the current error with setting Proportional Gain"""
+        """
+        Get the Proportional Gain (Kp) of the PID controller.
+        This value determines how aggressively the PID reacts to the current error.
+        """
         return self._kp
 
     @kp.setter
     def kp(self, value):
+        """
+        Set the Proportional Gain (Kp) of the PID controller.
+        Adjusting this value changes how aggressively the PID responds to the current error.
+        """
         self._kp = value
 
     @property
     def ki(self):
-        """Aggressively the PID reacts to the current error with setting Integral Gain"""
+       """
+        Get the Integral Gain (Ki) of the PID controller.
+        This value determines how aggressively the PID reacts to the accumulated error over time.
+        """
         return self._ki
 
     @ki.setter
     def ki(self, value):
+        """
+        Set the Integral Gain (Ki) of the PID controller.
+        Adjusting this value changes how the PID responds to the accumulated error over time.
+        """
         self._ki = value
 
     @property
     def kd(self):
-        """Determines how aggressively the PID reacts to the current
-        error with setting Derivative Gain"""
+        """
+        Get the Derivative Gain (Kd) of the PID controller.
+        This value determines how aggressively the PID reacts to the rate of change of the error.
+        """
         return self._kd
 
     @kd.setter
     def kd(self, value):
+        """
+        Set the Derivative Gain (Kd) of the PID controller.
+        Adjusting this value changes how the PID responds to the rate of change of the error.
+        """
         self._kd = value
 
     @property
     def set_point(self):
-        """The target point to the PID"""
+        """
+        Get the target set point of the PID controller.
+        The PID controller will attempt to adjust the process to meet this set point.
+        """
         return self._set_point
 
     @set_point.setter
     def set_point(self, value):
+        """
+        Set the target set point of the PID controller.
+        Adjusting this value changes the target that the PID controller will try to achieve.
+        """
         self._set_point = value
 
     @property
     def windup(self):
-        """Integral windup, also known as integrator windup or reset windup,
-        refers to the situation in a PID feedback controller where
-        a large change in setpoint occurs (say a positive change)
-        and the integral terms accumulates a significant error
-        during the rise (windup), thus overshooting and continuing
-        to increase as this accumulated error is unwound
-        (offset by errors in the other direction).
-        The specific problem is the excess overshooting.
+        """
+        Get the windup limit for the integral term of the PID controller.
+        This value prevents the integral term from accumulating excessive error.
         """
         return self._windup
 
     @windup.setter
+    
     def windup(self, value):
+        """
+        Set the windup limit for the integral term of the PID controller.
+        Adjusting this value sets a limit to prevent excessive accumulation of the integral error.
+        """
         self._windup = (-value, value)
 
     @property
     def sample_time(self):
-        """PID that should be updated at a regular interval.
-        Based on a pre-determined sampe time, the PID decides if it should compute or
-        return immediately.
+        """
+        Get the sample time for the PID controller.
+        This is the interval at which the PID controller updates its calculations.
         """
         return self._sample_time
 
     @sample_time.setter
     def sample_time(self, value):
+        """
+        Set the sample time for the PID controller.
+        Adjusting this value changes the frequency at which the PID controller updates its output.
+        """
         self._sample_time = value
 
     @property
@@ -192,7 +223,10 @@ class PIDController:
 
     @property
     def output(self):
-        """PID result"""
+        """
+        Get the current output of the PID controller.
+        This is the computed control variable that should be applied to the process.
+        """
         return self._output
 
     def log(self, message):
