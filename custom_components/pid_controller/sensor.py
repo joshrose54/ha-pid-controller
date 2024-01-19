@@ -46,7 +46,7 @@ PLATFORM_SCHEMA = vol.All(
             vol.Optional(CONF_UNIQUE_ID): cv.string,
             vol.Required(CONF_SENSOR): cv.entity_id,
             vol.Required(CONF_SETPOINT): cv.template,
-            vol.Optional(CONF_SHUT_DOWN_HIGH, default=DEFAULT_SHUT_DOWN_HIGH): cv.positive_float,
+            vol.Required(CONF_SHUT_DOWN_HIGH, default=DEFAULT_SHUT_DOWN_HIGH): cv.positive_float,
             vol.Optional(CONF_PROPORTIONAL, default=0): cv.template,
             vol.Optional(CONF_INTEGRAL, default=0): cv.template,
             vol.Optional(CONF_DERIVATIVE, default=0): cv.template,
@@ -772,6 +772,13 @@ class PidController(SensorEntity):
         if self._pid:
             self._pid.reset_pid()
 
+    def disable_pid(self):
+        """
+        Disables the PID controller by setting its enabled state to False.
+        """
+        self._enabled_template = False
+        _LOGGER.info("PID controller disabled.")
+
     def update(self) -> None:
         """Update the sensor state if needed."""
         self._update_sensor()
@@ -779,6 +786,22 @@ class PidController(SensorEntity):
     def _update_sensor(self, entity=None) -> None:
         if entity in self._reset_pid:
             self.reset_pid()
+
+        # Get the current state of the sensor
+        current_sensor_state = self.source
+
+        # Get the shut_down_high value
+        try:
+            shut_down_high = float(self._shut_down_high_template.async_render(parse_result=False))
+        except (TemplateError, ValueError):
+            _LOGGER.error("Invalid shut_down_high value")
+            shut_down_high = None
+
+        # Check if current sensor state exceeds the shut_down_high threshold
+        if shut_down_high is not None and current_sensor_state > shut_down_high:
+            _LOGGER.warning(f"Sensor state {current_sensor_state} exceeds shut_down_high threshold {shut_down_high}. Shutting down PID controller.")
+            self.disable_pid()
+            return
 
         if not self.enabled:
             return
