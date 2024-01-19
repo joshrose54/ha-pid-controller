@@ -199,7 +199,6 @@ class PidController(SensorEntity):
         self._reset_pid = []
         self._feedback_pid = []
         self._pid = None
-        self._source = entity_id
         self._tunning = False
         self._updating = False
         self._tunnig_calculating = False
@@ -768,8 +767,6 @@ class PidController(SensorEntity):
                 self._entities += info.entities
                 self._force_update += info.entities
                 self._reset_pid += info.entities
-
-        self._entities += [self._source]
 
     def reset_pid(self):
         if self._pid:
