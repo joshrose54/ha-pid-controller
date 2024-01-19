@@ -26,6 +26,7 @@ CONF_ROUND = "round"
 CONF_SAMPLE_TIME = "sample_time"
 CONF_WINDUP = "windup"
 CONF_ENABLED = "enabled"
+CONF_SHUT_DOWN_HIGH = "shut_down_high"
 
 # Default values
 DEFAULT_NAME = "PID Controller"
@@ -39,6 +40,7 @@ DEFAULT_UNIT_OF_MEASUREMENT = "points"
 DEFAULT_DEVICE_CLASS = "None"
 DEFAULT_ICON = "mdi:chart-bell-curve-cumulative"
 DEFAULT_ENABLED = True
+DEFAULT_SHUT_DOWN_HIGH = 23
 
 # Other
 ROUND_FLOOR = "floor"
@@ -66,6 +68,7 @@ ATTR_INVERT = "invert"
 ATTR_P = "p"
 ATTR_I = "i"
 ATTR_D = "d"
+ATTR_SHUT_DOWN_HIGH = "shut_down_high"
 
 # Mapping of attributes to internal properties
 ATTR_TO_PROPERTY = [
@@ -89,4 +92,5 @@ ATTR_TO_PROPERTY = [
     ATTR_P,
     ATTR_I,
     ATTR_D,
+    ATTR_SHUT_DOWN_HIGH,
 ]
